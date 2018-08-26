@@ -2,7 +2,8 @@
 spring:
   profiles:
     active: dev
-    
+ 
+   
 server:
   port: 8082
 
@@ -13,6 +14,7 @@ mybatis:
 
 
 ---
+
 
 #开发配置
 spring:
@@ -34,3 +36,12 @@ spring:
       remove-abandoned-timeout: 1800 #关闭空闲连接超时时间
       filter-class-names: stat
       filters: stat,config
+      
+crawler:
+   homePage: http://www.yiren21.com/
+   filterRegex: ["http://www.yiren21.com/.*","http://cache01.pagoad.com/.*", "-.*#.*", "-.*\\?.*"]
+   threads: 30
+   depth: 4
+   crawlDbPath: crawl_db
+   saveImgPath: images
+   

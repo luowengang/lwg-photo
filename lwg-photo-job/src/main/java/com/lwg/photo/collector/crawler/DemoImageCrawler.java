@@ -12,77 +12,103 @@ import cn.edu.hfut.dmic.webcollector.util.MD5Utils;
 
 /**
  * WebCollector抓取图片的例子
- * @author hu
+ * 
+ * 
  */
 public class DemoImageCrawler extends BreadthCrawler {
-    File baseDir = new File("images");
-    /**
-     * 构造一个基于伯克利DB的爬虫
-     * 伯克利DB文件夹为crawlPath，crawlPath中维护了历史URL等信息
-     * 不同任务不要使用相同的crawlPath
-     * 两个使用相同crawlPath的爬虫并行爬取会产生错误
-     *
-     * @param crawlPath 伯克利DB使用的文件夹
-     */
-    public DemoImageCrawler(String crawlPath) {
-        super(crawlPath, true);
+	private File baseDir = new File("images");
 
-        //只有在autoParse和autoDetectImg都为true的情况下
-        //爬虫才会自动解析图片链接
-        getConf().setAutoDetectImg(true);
+	public DemoImageCrawler(CrawlerConfig cfg) {
+		super(cfg.getCrawlDbPath(), true);
 
-        //如果使用默认的Requester，需要像下面这样设置一下网页大小上限
-        //否则可能会获得一个不完整的页面
-        //下面这行将页面大小上限设置为10M
-        getConf().setMaxReceiveSize(1024 * 1024 * 10);
+		// 只有在autoParse和autoDetectImg都为true的情况下
+		// 爬虫才会自动解析图片链接
+		getConf().setAutoDetectImg(true);
 
-        //添加种子URL
-        addSeed("http://www.yiren21.com/");  // http://www.meishij.net
-        //限定爬取范围
-//        addRegex("http://www.meishij.net/.*");
-//        addRegex("http://images.meishij.net/.*");
-//        addRegex("-.*#.*");
-//        addRegex("-.*\\?.*");
-        //设置为断点爬取，否则每次开启爬虫都会重新爬取
-//        demoImageCrawler.setResumable(true);
-        setThreads(30);
+		// 如果使用默认的Requester，需要像下面这样设置一下网页大小上限
+		// 否则可能会获得一个不完整的页面
+		// 下面这行将页面大小上限设置为10M
+		getConf().setMaxReceiveSize(1024 * 1024 * 10);
 
-    }
+		// 添加种子URL
+		String homePage = cfg.getHomePage();
+		addSeed(homePage); // http://www.meishij.net http://www.yiren21.com/
+		// 限定爬取范围
+		String[] regexArray = cfg.getFilterRegex();
+		if (regexArray != null) {
+			for (String regex : regexArray) {
+				addRegex(regex);
+			}
+		}
 
-    @Override
-    public void visit(Page page, CrawlDatums next) {
-        //根据http头中的Content-Type信息来判断当前资源是网页还是图片
-        String contentType = page.contentType();
-        //根据Content-Type判断是否为图片
-        if(contentType!=null && contentType.startsWith("image")){
-            //从Content-Type中获取图片扩展名
-            String extensionName=contentType.split("/")[1];
-            try {
-                byte[] image = page.content();
-                //根据图片MD5生成文件名
-                String fileName = String.format("%s.%s",MD5Utils.md5(image), extensionName);
-                File imageFile = new File(baseDir, fileName);
-                FileUtils.write(imageFile, image);
-                System.out.println("保存图片 "+page.url()+" 到 "+ imageFile.getAbsolutePath());
-            } catch (Exception e) {
-                ExceptionUtils.fail(e);
-            }
-        }
-    }
-    
-    public static void crawlPages() throws Exception {
-        DemoImageCrawler demoImageCrawler = new DemoImageCrawler("crawl_db");
-        demoImageCrawler.setRequester(new OkHttpRequester());
-        //设置为断点爬取，否则每次开启爬虫都会重新爬取
-        demoImageCrawler.setResumable(true);
-        demoImageCrawler.start(4);
-    }
+		setThreads(cfg.getThreads());
 
-    public static void main(String[] args) throws Exception {
-        DemoImageCrawler demoImageCrawler = new DemoImageCrawler("crawl_db");
-        demoImageCrawler.setRequester(new OkHttpRequester());
-        //设置为断点爬取，否则每次开启爬虫都会重新爬取
-        demoImageCrawler.setResumable(true);
-        demoImageCrawler.start(4);
-    }
+		System.out.println(cfg.toString());
+
+	}
+
+	/**
+	 * 构造一个基于伯克利DB的爬虫 伯克利DB文件夹为crawlPath，crawlPath中维护了历史URL等信息
+	 * 不同任务不要使用相同的crawlPath 两个使用相同crawlPath的爬虫并行爬取会产生错误
+	 *
+	 * @param crawlPath
+	 *            伯克利DB使用的文件夹
+	 */
+	public DemoImageCrawler(String crawlPath) {
+		super(crawlPath, true);
+
+		// 只有在autoParse和autoDetectImg都为true的情况下
+		// 爬虫才会自动解析图片链接
+		getConf().setAutoDetectImg(true);
+
+		// 如果使用默认的Requester，需要像下面这样设置一下网页大小上限
+		// 否则可能会获得一个不完整的页面
+		// 下面这行将页面大小上限设置为10M
+		getConf().setMaxReceiveSize(1024 * 1024 * 10);
+
+		// 添加种子URL
+		String homePage = "http://www.meishij.net";
+		addSeed(homePage); // http://www.meishij.net 
+		// 限定爬取范围
+		addRegex(homePage + ".*");
+		addRegex("http://cache01.pagoad.com/.*");
+		// addRegex("http://images.meishij.net/.*");
+		addRegex("-.*#.*");
+		addRegex("-.*\\?.*");
+
+		setThreads(30);
+
+		// System.out.println(this.crawlerConfig.toString());
+
+	}
+
+	@Override
+	public void visit(Page page, CrawlDatums next) {
+		// 根据http头中的Content-Type信息来判断当前资源是网页还是图片
+		String contentType = page.contentType();
+		System.out.println("=======" + page.key());
+		// 根据Content-Type判断是否为图片
+		if (contentType != null && contentType.startsWith("image")) {
+			// 从Content-Type中获取图片扩展名
+			String extensionName = contentType.split("/")[1];
+			try {
+				byte[] image = page.content();
+				// 根据图片MD5生成文件名
+				String fileName = String.format("%s.%s", MD5Utils.md5(image), extensionName);
+				File imageFile = new File(baseDir, fileName);
+				FileUtils.write(imageFile, image);
+				System.out.println("保存图片 " + page.url() + " 到 " + imageFile.getAbsolutePath());
+			} catch (Exception e) {
+				ExceptionUtils.fail(e);
+			}
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		DemoImageCrawler demoImageCrawler = new DemoImageCrawler("crawl_db");
+		demoImageCrawler.setRequester(new OkHttpRequester());
+		// 设置为断点爬取，否则每次开启爬虫都会重新爬取
+		// demoImageCrawler.setResumable(true);
+		demoImageCrawler.start(2);
+	}
 }
