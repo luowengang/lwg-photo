@@ -1,4 +1,4 @@
-package com.lwg.photo.job.dao.config;
+package com.lwg.photo.collector.dao.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

@@ -1,6 +1,6 @@
-package com.lwg.photo.job.dao;
+package com.lwg.photo.collector.dao;
 
-import com.lwg.photo.job.model.domain.BeautyPhoto;
+import com.lwg.photo.collector.model.domain.BeautyPhoto;
 
 public interface BeautyPhotoMapper {
     int deleteByPrimaryKey(String id);

@@ -1,4 +1,4 @@
-package com.lwg.photo.job.controller;
+package com.lwg.photo.collector.controller;
 
 import javax.annotation.Resource;
 
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lwg.photo.job.model.domain.BeautyPhoto;
-import com.lwg.photo.job.service.IBeautyPhotoService;
+import com.lwg.photo.collector.model.domain.BeautyPhoto;
+import com.lwg.photo.collector.service.IBeautyPhotoService;
 
 @RestController
 @RequestMapping(value = "/photo")

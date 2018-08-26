@@ -1,4 +1,4 @@
-package com.lwg.photo.job.model.domain;
+package com.lwg.photo.collector.model.domain;
 
 import java.util.Date;
 

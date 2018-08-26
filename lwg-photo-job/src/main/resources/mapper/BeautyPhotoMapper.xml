@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lwg.photo.job.dao.BeautyPhotoMapper" >
-  <resultMap id="BaseResultMap" type="com.lwg.photo.job.model.domain.BeautyPhoto" >
+<mapper namespace="com.lwg.photo.collector.dao.BeautyPhotoMapper" >
+  <resultMap id="BaseResultMap" type="com.lwg.photo.collector.model.domain.BeautyPhoto" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="category" property="category" jdbcType="VARCHAR" />
@@ -23,7 +23,7 @@
     delete from beauty_photo
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.lwg.photo.job.model.domain.BeautyPhoto" >
+  <insert id="insert" parameterType="com.lwg.photo.collector.model.domain.BeautyPhoto" >
     insert into beauty_photo (id, title, category, 
       remark, collectTime, url, 
       location)
@@ -31,7 +31,7 @@
       #{remark,jdbcType=VARCHAR}, #{collecttime,jdbcType=TIMESTAMP}, #{url,jdbcType=VARCHAR}, 
       #{location,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.lwg.photo.job.model.domain.BeautyPhoto" >
+  <insert id="insertSelective" parameterType="com.lwg.photo.collector.model.domain.BeautyPhoto" >
     insert into beauty_photo
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lwg.photo.job.model.domain.BeautyPhoto" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.lwg.photo.collector.model.domain.BeautyPhoto" >
     update beauty_photo
     <set >
       <if test="title != null" >
@@ -104,7 +104,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lwg.photo.job.model.domain.BeautyPhoto" >
+  <update id="updateByPrimaryKey" parameterType="com.lwg.photo.collector.model.domain.BeautyPhoto" >
     update beauty_photo
     set title = #{title,jdbcType=VARCHAR},
       category = #{category,jdbcType=VARCHAR},
