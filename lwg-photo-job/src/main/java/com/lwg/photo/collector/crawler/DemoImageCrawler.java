@@ -71,7 +71,7 @@ public class DemoImageCrawler extends BreadthCrawler {
 		addSeed(homePage); // http://www.meishij.net 
 		// 限定爬取范围
 		addRegex(homePage + ".*");
-		addRegex("http://cache01.pagoad.com/.*");
+		addRegex("http://www.meishij.net/.*");
 		// addRegex("http://images.meishij.net/.*");
 		addRegex("-.*#.*");
 		addRegex("-.*\\?.*");

@@ -1,0 +1,20 @@
+
+server:
+  port: 8080
+  context-path: /photo
+  servlet-path: /
+
+
+#开发配置
+spring:
+  profiles: dev
+  devtools:
+     restart:
+         #热部署生效
+         enabled: true
+         #设置重启的目录
+         #additional-paths: src/main/java
+         #classpath目录下的WEB-INF文件夹内容修改不重启
+         exclude: WEB-INF/**        
+
+   
