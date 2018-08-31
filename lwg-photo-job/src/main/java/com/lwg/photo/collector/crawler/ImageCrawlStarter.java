@@ -21,7 +21,7 @@ public class ImageCrawlStarter implements ApplicationRunner {
 		
 		imageCrawler.setRequester(new OkHttpRequester());
 		// 设置为断点爬取，否则每次开启爬虫都会重新爬取
-		// demoImageCrawler.setResumable(true);
+		imageCrawler.setResumable(true);
 		imageCrawler.start(crawlerConfig.getDepth());
 		
 	}

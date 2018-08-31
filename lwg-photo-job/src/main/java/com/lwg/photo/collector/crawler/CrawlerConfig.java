@@ -53,22 +53,34 @@ public class CrawlerConfig {
 	public String getSaveImgPath() {
 		return saveImgPath;
 	}
+	
+	private String homePage;
+	public String getImgUrlPrefix() {
+		return imgUrlPrefix;
+	}
+
+	public void setImgUrlPrefix(String imgUrlPrefix) {
+		this.imgUrlPrefix = imgUrlPrefix;
+	}
 
 	public void setSaveImgPath(String saveImgPath) {
 		this.saveImgPath = saveImgPath;
 	}
 
+
 	@Override
 	public String toString() {
 		return "CrawlerConfig [homePage=" + homePage + ", filterRegex=" + Arrays.toString(filterRegex) + ", threads="
-				+ threads + ", depth=" + depth + "]";
+				+ threads + ", depth=" + depth + ", crawlDbPath=" + crawlDbPath + ", saveImgPath=" + saveImgPath
+				+ ", imgUrlPrefix=" + imgUrlPrefix + "]";
 	}
 
-	private String homePage;
+
 	private String[] filterRegex;
 	private int threads;
 	private int depth;
 	private String crawlDbPath;
 	private String saveImgPath;
+	private String imgUrlPrefix;
 
 }
