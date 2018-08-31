@@ -34,7 +34,7 @@ public class DemoImageCrawler extends BreadthCrawler {
 
 		// 只有在autoParse和autoDetectImg都为true的情况下
 		// 爬虫才会自动解析图片链接
-		// getConf().setAutoDetectImg(true);
+		 getConf().setAutoDetectImg(true);
 
 		// 如果使用默认的Requester，需要像下面这样设置一下网页大小上限
 		// 否则可能会获得一个不完整的页面
@@ -99,15 +99,7 @@ public class DemoImageCrawler extends BreadthCrawler {
 	public void visit(Page page, CrawlDatums next) {
 		// 根据http头中的Content-Type信息来判断当前资源是网页还是图片
 		String contentType = page.contentType();
-		// System.out.println("=======" + page.key());
-		
-		filterImgCollectionHtmlPage(page);
-		
-//		if (page.url().equals("http://www.yiren21.com/se/yazhousetu/621841.html")) {
-//			filterImgCollectionHtmlPage(page);
-//			System.out.println("=======" + page.doc());
-//		}
-		
+				
 		// 根据Content-Type判断是否为图片
 		if (contentType != null && contentType.startsWith("image")) {
 			// 从Content-Type中获取图片扩展名
@@ -129,6 +121,8 @@ public class DemoImageCrawler extends BreadthCrawler {
 			} catch (Exception e) {
 				ExceptionUtils.fail(e);
 			}
+		} else if(contentType != null && contentType.endsWith("html")){
+			filterImgCollectionHtmlPage(page);
 		}
 	}
 	private void filterImgCollectionHtmlPage(Page page) {
@@ -136,7 +130,7 @@ public class DemoImageCrawler extends BreadthCrawler {
 		if(url.endsWith(".html")) {
 			Document doc = page.doc();
 			String tilte = doc.title();
-			int titleLength = tilte.length()>20? 20:tilte.length();
+			int titleLength = tilte.length()>40? 40:tilte.length();
 			String folderTitle = doc.title().substring(0, titleLength);
 			Elements elems = doc.select("img[src^=" + this.imgUrlPrefix +"]");
 			if(elems == null) {
