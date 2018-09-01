@@ -1,5 +1,7 @@
 package com.lwg.photo.collector.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +20,12 @@ public class BeautyPhotoServiceImpl implements IBeautyPhotoService {
 	public BeautyPhoto getBeautyPhoto(String id) {
 
 		return photoDao.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public int saveBeautyPhotos(List<BeautyPhoto> photos) {
+
+		return photoDao.insertBatch(photos);
 	}
 
 }

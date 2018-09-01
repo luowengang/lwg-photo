@@ -36,13 +36,19 @@ spring:
       remove-abandoned-timeout: 1800 #关闭空闲连接超时时间
       filter-class-names: stat
       filters: stat,config
+   
+
+log:
+   path: logs/collector
+   level: info
+   
       
 crawler:
    homePage: http://www.yiren21.com/
    imgUrlPrefix: http://cache01.pagoad.com
    filterRegex: ["http://www.yiren21.com/.*","http://cache01.pagoad.com/.*", "-.*#.*", "-.*\\?.*"]
    threads: 30
-   depth: 4
+   depth: 5
    crawlDbPath: crawl_db
    saveImgPath: images
    

@@ -7,11 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan("com.lwg.photo.collector.dao")
-public class PhotoShowApplication {
+public class PhotoCollectorApplication {
 
 
 	public static void main(String[] args) {
-		SpringApplication.run(PhotoShowApplication.class, args);
+		SpringApplication.run(PhotoCollectorApplication.class, args);
 		
 	}
 }

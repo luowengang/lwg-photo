@@ -1,18 +1,26 @@
 package com.lwg.photo.collector.crawler;
 
 import java.io.File;
-import java.nio.file.FileSystemException;
+import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.regex.Pattern;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.lwg.photo.collector.model.domain.BeautyPhoto;
+import com.lwg.photo.collector.service.impl.PhotoSaveService;
 
 import cn.edu.hfut.dmic.webcollector.model.CrawlDatums;
 import cn.edu.hfut.dmic.webcollector.model.Page;
 import cn.edu.hfut.dmic.webcollector.plugin.berkeley.BreadthCrawler;
-import cn.edu.hfut.dmic.webcollector.plugin.net.OkHttpRequester;
 import cn.edu.hfut.dmic.webcollector.util.ExceptionUtils;
 import cn.edu.hfut.dmic.webcollector.util.FileUtils;
 import cn.edu.hfut.dmic.webcollector.util.MD5Utils;
@@ -22,13 +30,22 @@ import cn.edu.hfut.dmic.webcollector.util.MD5Utils;
  * 
  * 
  */
+@Component
 public class DemoImageCrawler extends BreadthCrawler {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	private File baseDir = new File("images");
 	
 	private String imgUrlPrefix = "";
 
-	private ConcurrentMap<String, ImageElement> imgFolderMap= new ConcurrentHashMap<>();
+	
+	@Autowired
+	private PhotoSaveService photoSaveService;
 
+	private ConcurrentMap<String, ImageElement> imgFolderMap= new ConcurrentHashMap<>();
+	
+	@Autowired
 	public DemoImageCrawler(CrawlerConfig cfg) {
 		super(cfg.getCrawlDbPath(), true);
 
@@ -56,7 +73,7 @@ public class DemoImageCrawler extends BreadthCrawler {
 
 		setThreads(cfg.getThreads());
 
-		System.out.println(cfg.toString());
+		logger.info(cfg.toString());
 
 	}
 
@@ -111,13 +128,29 @@ public class DemoImageCrawler extends BreadthCrawler {
 				ImageElement imgElem = this.imgFolderMap.get(pageUrl);
 				File parentFile = createParentFile(imgElem);
 				
-				String imgId = imgElem.getId();
+				if(imgElem == null) {					
+					return;
+				}
+				
+				String imgAltId = imgElem.getId();
+				String imgId =  MD5Utils.md5(image);
+				
 				// 根据图片MD5生成文件名
-				String fileName = String.format("%s.%s", imgId + "_" + MD5Utils.md5(image),
+				String fileName = String.format("%s.%s", imgAltId + "_" + imgId,
 						extensionName);
 				File imageFile = new File(parentFile, fileName);
-				FileUtils.write(imageFile, image);
-				System.out.println("保存图片 " + page.url() + " 到 " + imageFile.getAbsolutePath());
+				FileUtils.write(imageFile, image);				
+				logger.info("保存图片 " + page.url() + " 到 " + imageFile.getAbsolutePath());
+				
+				BeautyPhoto photo = new BeautyPhoto();
+				photo.setCategory("Life");
+				photo.setCollecttime(new Date());
+				photo.setCollecturl(imgElem.getUrl());
+				photo.setImgid(imgId);
+				photo.setLocation(imageFile.getParentFile().getName() + File.separator + imageFile.getName());
+				photo.setUuid(UUID.randomUUID().toString().replaceAll("-", ""));
+				photo.setTitle(imgElem.getTitle());
+				photoSaveService.putSavingPhoto(photo);
 			} catch (Exception e) {
 				ExceptionUtils.fail(e);
 			}
@@ -125,13 +158,24 @@ public class DemoImageCrawler extends BreadthCrawler {
 			filterImgCollectionHtmlPage(page);
 		}
 	}
+	
+	
 	private void filterImgCollectionHtmlPage(Page page) {
 		String url = page.url();
 		if(url.endsWith(".html")) {
 			Document doc = page.doc();
-			String tilte = doc.title();
-			int titleLength = tilte.length()>40? 40:tilte.length();
-			String folderTitle = doc.title().substring(0, titleLength);
+			String title = doc.title();
+			String[] titleSeg = title.split("-");
+			if(titleSeg != null && titleSeg.length>0) {
+				title = titleSeg[0];
+			} else {
+				int titleLength = title.length()>40? 40:title.length();
+				title = doc.title().substring(0, titleLength);
+			}
+			
+			title = filterFileChar(title.trim()); // 要去掉空格
+			
+			
 			Elements elems = doc.select("img[src^=" + this.imgUrlPrefix +"]");
 			if(elems == null) {
 				return;
@@ -139,42 +183,34 @@ public class DemoImageCrawler extends BreadthCrawler {
 			for(Element elem : elems) {
 				String imgUrl = elem.attr("src");
 				String imgId = elem.attr("id");
-				this.imgFolderMap.putIfAbsent(imgUrl, new ImageElement(imgUrl, imgId, folderTitle));
-				System.out.println("---====" + imgUrl);
+				this.imgFolderMap.putIfAbsent(imgUrl, new ImageElement(imgUrl, imgId, title));
+				logger.info("imgUrl===" + imgUrl);
 			}
 		}
+	}
+	
+	private static Pattern FilePattern = Pattern.compile("[\\\\/:*?\"<>|]");
+	public static String filterFileChar(String str) {
+		return str==null?"":FilePattern.matcher(str).replaceAll("");
 	}
 
 	private File createParentFile(ImageElement imgElem) {	
 
 		File parentFile = baseDir;
 		if(imgElem != null) {
-			parentFile = new File(baseDir, imgElem.getTitle());
-			if (!parentFile.exists()) {
-				boolean result = mkdirParentFile(parentFile);
-				if (!result) {
-					ExceptionUtils.fail(new FileSystemException(parentFile.getPath()));
-				}
-			}
+			parentFile = new File(baseDir, imgElem.getTitle());					
 		}
 		
 		return parentFile;
 	}
 
-	private synchronized boolean mkdirParentFile(File file) {
-		if (!file.exists()) {
-			return file.mkdirs();			
-		}
-		return true;
-	}
 
 	public static void main(String[] args) throws Exception {
-		 DemoImageCrawler demoImageCrawler = new DemoImageCrawler("crawl_db");
-		 demoImageCrawler.setRequester(new OkHttpRequester());
-		 // 设置为断点爬取，否则每次开启爬虫都会重新爬取
-		 // demoImageCrawler.setResumable(true);
-		 demoImageCrawler.start(4);
-
-
+//		 DemoImageCrawler demoImageCrawler = new DemoImageCrawler("crawl_db");
+//		 demoImageCrawler.setRequester(new OkHttpRequester());
+//		 // 设置为断点爬取，否则每次开启爬虫都会重新爬取
+//		 // demoImageCrawler.setResumable(true);
+//		 demoImageCrawler.start(4);
+		
 	}
 }
