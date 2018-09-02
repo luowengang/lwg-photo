@@ -13,6 +13,10 @@ spring:
          #classpath目录下的WEB-INF文件夹内容修改不重启
          exclude: WEB-INF/**   
          
+log:
+   path: logs/showwebsite
+   level: info
+   
 outsideResource:
   imgRootPath: D:\\Code\\Projects\\staticResource\\images         
 server:
