@@ -4,13 +4,11 @@
     <ul class="waterfall-list" ng-waterfall cols="6">
         <li ng-repeat="image in images" repeat-finished>
             <div class="data-block">
-                <img src="{{image.url}}" alt="{{image.summary}}"/>
+                <img src="/images/{{image.location}}" alt="{{image.remark}}" />
                 <p>{{image.title}}</p>
-                <p>{{image.summary}}</p>
+                <p>{{image.remark}}</p>
             </div>
         </li>
         <div class="loadMore" ng-if="loadMore" ng-infinite-scroll ng-click="loadMoreData()">{{text}}</div>
     </ul>
 </div>
-
-

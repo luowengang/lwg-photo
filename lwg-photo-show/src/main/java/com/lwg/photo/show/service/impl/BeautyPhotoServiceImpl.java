@@ -30,11 +30,12 @@ public class BeautyPhotoServiceImpl implements IBeautyPhotoService{
 	}
 
 	@Override
-	public List<BeautyPhoto> selectPhotoInPage(int startIndex, int endIndex) {
+	public Page<BeautyPhoto> selectPhotoInPage(int startIndex, int endIndex) {
 		PageHelper.startPage(startIndex, endIndex);
         List<BeautyPhoto> photos = photoDao.selectAll();
-        logger.info("Total: " + ((Page) photos).getTotal());
-        return photos; 
+        Page<BeautyPhoto> photoPage = (Page<BeautyPhoto>) photos;
+        logger.info("Total: " + photoPage.getTotal());
+        return photoPage; 
 	}
 
 }

@@ -48,6 +48,8 @@ public class DemoImageCrawler extends BreadthCrawler {
 	@Autowired
 	public DemoImageCrawler(CrawlerConfig cfg) {
 		super(cfg.getCrawlDbPath(), true);
+		
+		this.baseDir = new File(cfg.getSaveImgPath());
 
 		// 只有在autoParse和autoDetectImg都为true的情况下
 		// 爬虫才会自动解析图片链接

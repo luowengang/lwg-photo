@@ -50,5 +50,5 @@ crawler:
    threads: 30
    depth: 5
    crawlDbPath: crawl_db
-   saveImgPath: images
+   saveImgPath: D:\\Code\\Projects\\staticResource\\images
    
