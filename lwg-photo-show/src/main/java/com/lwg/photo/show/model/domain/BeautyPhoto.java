@@ -3,7 +3,9 @@ package com.lwg.photo.show.model.domain;
 import java.util.Date;
 
 public class BeautyPhoto {
-    private String id;
+    private String uuid;
+
+    private String imgid;
 
     private String title;
 
@@ -13,16 +15,24 @@ public class BeautyPhoto {
 
     private Date collecttime;
 
-    private String url;
+    private String collecturl;
 
     private String location;
 
-    public String getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setUuid(String uuid) {
+        this.uuid = uuid == null ? null : uuid.trim();
+    }
+
+    public String getImgid() {
+        return imgid;
+    }
+
+    public void setImgid(String imgid) {
+        this.imgid = imgid == null ? null : imgid.trim();
     }
 
     public String getTitle() {
@@ -57,12 +67,12 @@ public class BeautyPhoto {
         this.collecttime = collecttime;
     }
 
-    public String getUrl() {
-        return url;
+    public String getCollecturl() {
+        return collecturl;
     }
 
-    public void setUrl(String url) {
-        this.url = url == null ? null : url.trim();
+    public void setCollecturl(String collecturl) {
+        this.collecturl = collecturl == null ? null : collecturl.trim();
     }
 
     public String getLocation() {

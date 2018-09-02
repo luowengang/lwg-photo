@@ -1,5 +1,7 @@
 package com.lwg.photo.show.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,12 @@ public class PhotoShowController {
     String getPhotoByCategory(@RequestParam(value = "category") String category){
     	BeautyPhoto photo = beautyPhotoService.getBeautyPhoto("1234567890");   
     	return photo.getTitle();
+    }
+    
+    @RequestMapping(value = "/getPhoto", method = RequestMethod.GET)
+    List<BeautyPhoto>  getPhotoByCategory(@RequestParam(value = "startIndex") int startIndex, @RequestParam(value = "endIndex") int endIndex ){
+    	List<BeautyPhoto> photos = beautyPhotoService.selectPhotoInPage(startIndex, endIndex);   
+    	return photos;
     }
 
 }
