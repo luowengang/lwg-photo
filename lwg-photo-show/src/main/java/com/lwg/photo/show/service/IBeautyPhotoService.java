@@ -7,7 +7,7 @@ public interface IBeautyPhotoService {
 	
 	BeautyPhoto getBeautyPhoto(String uuid);
 	
-	Page<BeautyPhoto> selectPhotoInPage(int startIndex, int endIndex);
+	Page<BeautyPhoto> selectPhotoInPage(int pageNum, int pageSize);
 	
 	
 }

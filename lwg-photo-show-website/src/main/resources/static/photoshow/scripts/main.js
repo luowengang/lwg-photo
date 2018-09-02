@@ -25,8 +25,8 @@ angular.module('angularWaterfallApp', ["ngWaterfall", "ui.router"])
                 $http({
                     method: "GET",
                     params: {
-                        'startIndex': (param.pageSize * param.page) || 1,
-                        'endIndex': (param.pageSize * (param.page + 1)) || 20,
+                        'pageNum': param.page || 1,
+                        'pageSize': param.pageSize || 30,
                     },
                     url: 'http://' + window.location.hostname + ':8060/photo/getPhoto'
                 }).
@@ -58,17 +58,19 @@ angular.module('angularWaterfallApp', ["ngWaterfall", "ui.router"])
                 myService.getImages({ page, pageSize }, function(data) {
                     $scope.images = [];
                     $scope.results = data.slice(0, page * pageSize);
-                    if ($scope.results.length == 730) {
+                    if ($scope.results.length == 9030) {
                         $scope.text = "内容已经全部加载完毕"
                     }
                     for (var i = 0; i < $scope.results.length; i++) {
                         $scope.images.push($scope.results[i]);
                     }
-                })
-                $scope.text = "点我加载更多···"
+                });
+                $scope.text = "点我加载更多···";
+                // angular.element('.body').scrollTop = 0;
+                document.body.scrollTop = 0
             }, 1500);
         };
-        $scope.$on("waterfall:loadMore", function() { //滚动自动填充事件
-            $scope.loadMoreData();
-        })
+        //        $scope.$on("waterfall:loadMore", function() { //滚动自动填充事件
+        //            $scope.loadMoreData();
+        //        })
     })

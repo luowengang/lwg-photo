@@ -26,8 +26,8 @@ public class PhotoShowController {
     }
     
     @RequestMapping(value = "/getPhoto", method = RequestMethod.GET)
-    Page<BeautyPhoto>  getPhotoByCategory(@RequestParam(value = "startIndex") int startIndex, @RequestParam(value = "endIndex") int endIndex ){
-    	Page<BeautyPhoto> photos = beautyPhotoService.selectPhotoInPage(startIndex, endIndex);   
+    Page<BeautyPhoto>  getPhotoByCategory(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize ){
+    	Page<BeautyPhoto> photos = beautyPhotoService.selectPhotoInPage(pageNum, pageSize);   
     	return photos;
     }
 
