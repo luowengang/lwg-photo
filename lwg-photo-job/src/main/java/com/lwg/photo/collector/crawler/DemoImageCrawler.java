@@ -62,7 +62,7 @@ public class DemoImageCrawler extends BreadthCrawler {
 
 		// 添加种子URL
 		String homePage = cfg.getHomePage();
-		addSeed(homePage); // http://www.meishij.net http://www.yiren21.com/
+		addSeed(homePage); // http://www.meishij.net 
 		// 限定爬取范围
 		String[] regexArray = cfg.getFilterRegex();
 		if (regexArray != null) {
@@ -99,7 +99,7 @@ public class DemoImageCrawler extends BreadthCrawler {
 		getConf().setMaxReceiveSize(1024 * 1024 * 10);
 
 		// 添加种子URL
-		String homePage = "http://www.yiren21.com/se/yazhousetu/621841.html";
+		String homePage = "http://www.meishij.net";
 		this.imgUrlPrefix = "http://cache01.pagoad.com";
 		addSeed(homePage); // http://www.meishij.net
 		// 限定爬取范围
