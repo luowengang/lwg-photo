@@ -38,4 +38,14 @@ public class BeautyPhotoServiceImpl implements IBeautyPhotoService{
         return photoPage; 
 	}
 
+	@Override
+	public List<BeautyPhoto> selectByTitle(String title) {
+		return photoDao.selectByTitle(title);
+	}
+
+	@Override
+	public List<String> selectAllTitles() {
+		return photoDao.selectAllTitles();
+	}
+
 }

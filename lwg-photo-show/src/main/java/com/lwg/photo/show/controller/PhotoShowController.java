@@ -1,5 +1,7 @@
 package com.lwg.photo.show.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,17 @@ public class PhotoShowController {
     @RequestMapping(value = "/getPhoto", method = RequestMethod.GET)
     Page<BeautyPhoto>  getPhotoByCategory(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize ){
     	Page<BeautyPhoto> photos = beautyPhotoService.selectPhotoInPage(pageNum, pageSize);   
+    	return photos;
+    }
+    
+    @RequestMapping(value = "/getAllTitle", method = RequestMethod.GET)
+    List<String>  getAllTitle(){
+    	return beautyPhotoService.selectAllTitles();
+    }
+    
+    @RequestMapping(value = "/getPhotoByTitle", method = RequestMethod.GET)
+    List<BeautyPhoto>  getPhotoByTitle(@RequestParam(value = "title") String title ){
+    	List<BeautyPhoto> photos = beautyPhotoService.selectByTitle(title);
     	return photos;
     }
 

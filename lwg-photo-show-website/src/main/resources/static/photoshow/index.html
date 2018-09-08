@@ -1,48 +1,54 @@
 <!doctype html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
-    <title>72289</title>
+    <title>Photo Show</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(.) styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
-  </head>
-  <body ng-app="angularWaterfallApp">
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+</head>
 
-    <!-- Add your site or application content here -->
-      <div ui-view></div>
+<body ng-app="photoShowApp" ng-controller="MainCtrl">
+    <div class="nav_more">
+        <button class="more" ng-click="initAllPhotoTitle()">
+        <span>更多图片</span>
+        </button>
+        <div class="titleShow" ng-show="showNav">
+
+            <table class="table table-striped">
+                <tbody>
+                    <tr ng-repeat="topic in topics">
+                        <td ng-click="showPhoto(topic)">{{ topic}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--<div ui-view></div>-->
+    <div class="container">
+        <h4>{{currentTitle}}</h4>
+        <ul class="waterfall-list" ng-waterfall cols="1">
+            <li ng-repeat="image in images" repeat-finished>
+                <div class="data-block">
+                    <img src="/images/{{image.location}}" alt="{{image.remark}}" />
+                </div>
+            </li>
+            <div class="loadMore" ng-if="loadMore" ng-infinite-scroll ng-click="loadMoreData()">{{text}}</div>
+        </ul>
+    </div>
 
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    <script src="scripts/lib/angular.min.js"></script>
+    <script src="scripts/lib/angular-ui-router.min.js"></script>
+    <script src="scripts/lib/angular-waterfall.js"></script>
 
+    <script src="scripts/main.js"></script>
+    <!--<script src="scripts/nav.js"></script>
+    <script src="scripts/home.js"></script>-->
 
-    <!-- build:js(.) scripts/oldieshimSFEFEFE.js -->
-    <!--[if lt IE 9]>
-    <script src="../bower_components/angular/angular.js"></script>
-    <![endif]-->
-    <!-- endbuild -->
-
-    <!-- build:js(.) scripts/vendorEFESE.js -->
-    <!-- bower:js -->
-    <!--<script src="bower_components/es5-shim/es5-shim.js"></script>-->
-    <script src="scripts/angular.min.js"></script>
-    <script src="scripts/angular-ui-router.min.js"></script>
-    <script src="scripts/angular-waterfall.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-        <!-- build:js({.tmp,app}) scripts/scriptsFEFEFE.js -->
-        <script src="scripts/main.js"></script>
-    <!-- endbuild -->
 </body>
+
 </html>

@@ -1,11 +1,8 @@
-
-
-
 #开发配置
 spring:
-  profiles: dev
-  devtools:
-     restart:
+   profiles: dev
+   devtools:
+      restart:
          #热部署生效
          enabled: true
          #设置重启的目录
@@ -18,10 +15,8 @@ log:
    level: info
    
 outsideResource:
-  imgRootPath: D:\\Code\\Projects\\staticResource\\images         
+   imgRootPath: D:\\Code\\Projects\\staticResource\\images         
 server:
-  port: 8090
-  context-path: /photo
-  servlet-path: /     
+   port: 8090   
 
    

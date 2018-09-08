@@ -22,4 +22,8 @@ public interface BeautyPhotoMapper {
     int updateByPrimaryKey(BeautyPhoto record);
     
     List<BeautyPhoto> selectAll();
+    
+    List<BeautyPhoto> selectByTitle(String title);
+    
+    List<String> selectAllTitles();
 }

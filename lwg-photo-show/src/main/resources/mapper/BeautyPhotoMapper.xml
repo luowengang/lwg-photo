@@ -25,7 +25,8 @@
 									and ${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and ${criterion.condition} #{criterion.value}
+									and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
@@ -43,7 +44,8 @@
 		</where>
 	</sql>
 	<sql id="Base_Column_List">
-		uuid, imgId, title, category, remark, collectTime, collectUrl, location
+		uuid, imgId, title, category, remark, collectTime,
+		collectUrl, location
 	</sql>
 	<select id="selectByExample" resultMap="BaseResultMap"
 		parameterType="com.lwg.photo.show.model.domain.BeautyPhotoExample">
@@ -69,16 +71,20 @@
 		where uuid = #{uuid,jdbcType=VARCHAR}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		delete from beauty_photo
+		delete from
+		beauty_photo
 		where uuid = #{uuid,jdbcType=VARCHAR}
 	</delete>
 	<insert id="insert" parameterType="com.lwg.photo.show.model.domain.BeautyPhoto">
-		insert into beauty_photo (uuid, imgId, title,
+		insert into beauty_photo
+		(uuid, imgId, title,
 		category, remark, collectTime,
-		collectUrl, location)
+		collectUrl,
+		location)
 		values (#{uuid,jdbcType=VARCHAR}, #{imgid,jdbcType=VARCHAR},
 		#{title,jdbcType=VARCHAR},
-		#{category,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{collecttime,jdbcType=TIMESTAMP},
+		#{category,jdbcType=VARCHAR},
+		#{remark,jdbcType=VARCHAR}, #{collecttime,jdbcType=TIMESTAMP},
 		#{collecturl,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective" parameterType="com.lwg.photo.show.model.domain.BeautyPhoto">
@@ -137,8 +143,25 @@
 		</trim>
 	</insert>
 	<select id="selectAll" resultType="BeautyPhoto">
-		select * from beauty_photo ORDER BY title, imgId
+		select * from beauty_photo
+		ORDER BY title, imgId
 	</select>
+	<select id="selectByTitle" resultType="BeautyPhoto"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from beauty_photo
+		where title = #{title,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectAllTitles" resultType="java.lang.String">
+		select
+		distinct(title)
+		from
+		beauty_photo
+		ORDER BY title
+	</select>
+
 	<select id="countByExample" parameterType="com.lwg.photo.show.model.domain.BeautyPhotoExample"
 		resultType="java.lang.Integer">
 		select count(*) from beauty_photo
@@ -174,13 +197,17 @@
 		where uuid = #{uuid,jdbcType=VARCHAR}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.lwg.photo.show.model.domain.BeautyPhoto">
-		update beauty_photo
+		update
+		beauty_photo
 		set imgId = #{imgid,jdbcType=VARCHAR},
-		title = #{title,jdbcType=VARCHAR},
+		title =
+		#{title,jdbcType=VARCHAR},
 		category = #{category,jdbcType=VARCHAR},
 		remark = #{remark,jdbcType=VARCHAR},
-		collectTime = #{collecttime,jdbcType=TIMESTAMP},
-		collectUrl = #{collecturl,jdbcType=VARCHAR},
+		collectTime =
+		#{collecttime,jdbcType=TIMESTAMP},
+		collectUrl =
+		#{collecturl,jdbcType=VARCHAR},
 		location = #{location,jdbcType=VARCHAR}
 		where uuid = #{uuid,jdbcType=VARCHAR}
 	</update>
