@@ -1,6 +1,6 @@
+---
 #开发配置
 spring:
-   profiles: dev
    devtools:
       restart:
          #热部署生效
@@ -18,5 +18,4 @@ outsideResource:
    imgRootPath: D:\\Code\\Projects\\staticResource\\images         
 server:
    port: 8090   
-
    
