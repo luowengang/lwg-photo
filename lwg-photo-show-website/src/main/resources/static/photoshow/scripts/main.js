@@ -19,7 +19,8 @@ angular.module('photoShowApp', ["ngWaterfall", "ui.router"])
 
 //     }
 // ])
-.factory("myService", function($http) {
+.value('restUrlPrefix', 'http://' + window.location.hostname + ':8060/')
+.factory("myService", ['$http','restUrlPrefix',function($http, restUrlPrefix) {
         return {
             getImages: function(param, cb) {
                 $http({
@@ -28,7 +29,7 @@ angular.module('photoShowApp', ["ngWaterfall", "ui.router"])
                         'pageNum': param.page || 1,
                         'pageSize': param.pageSize || 30,
                     },
-                    url: 'http://' + window.location.hostname + ':8060/photo/getPhoto'
+                    url: restUrlPrefix + 'photo/getPhoto'
                 }).
                 success(function(data, status) {
                     cb(data, status);
@@ -41,7 +42,7 @@ angular.module('photoShowApp', ["ngWaterfall", "ui.router"])
                     params: {
                         'title': title
                     },
-                    url: 'http://' + window.location.hostname + ':8060/photo/getPhotoByTitle'
+                    url: restUrlPrefix + 'photo/getPhotoByTitle'
                 }).
                 success(function(data, status) {
                     cb(data, status);
@@ -51,7 +52,7 @@ angular.module('photoShowApp', ["ngWaterfall", "ui.router"])
             getAllPhotoTitle: function(param, cb) {
                 $http({
                     method: "GET",
-                    url: 'http://' + window.location.hostname + ':8060/photo/getAllTitle'
+                    url: restUrlPrefix + 'photo/getAllTitle'
                 }).
                 success(function(data, status) {
                     cb(data, status);
@@ -59,7 +60,7 @@ angular.module('photoShowApp', ["ngWaterfall", "ui.router"])
                 error(function(data, status) {});
             }
         }
-    })
+    }])
     .controller('MainCtrl', function($scope, $rootScope, $state, $location, $timeout, myService) {
     	$scope.imgUrlPrefix = 'http://' + window.location.hostname + ':8030';
         var page = 1;
