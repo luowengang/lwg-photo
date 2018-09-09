@@ -61,7 +61,7 @@ angular.module('photoShowApp', ["ngWaterfall", "ui.router"])
         }
     })
     .controller('MainCtrl', function($scope, $rootScope, $state, $location, $timeout, myService) {
-
+    	$scope.imgUrlPrefix = 'http://' + window.location.hostname + ':8030';
         var page = 1;
         var pageSize = 30;
 
