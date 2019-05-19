@@ -62,7 +62,7 @@ angular.module('photoShowApp', ["ngWaterfall", "ui.router"])
         }
     }])
     .controller('MainCtrl', function($scope, $rootScope, $state, $location, $timeout, myService) {
-    	$scope.imgUrlPrefix = 'http://' + window.location.hostname + ':8030';
+    	$scope.imgUrlPrefix = 'http://' + window.location.hostname + ':8090';
         var page = 1;
         var pageSize = 30;
 
@@ -84,6 +84,7 @@ angular.module('photoShowApp', ["ngWaterfall", "ui.router"])
 
         $scope.text = "点我加载更多"
         $scope.loadMore = true;
+
         $scope.loadMoreData = function() {
             $scope.text = "加载中，请稍后···";
             $timeout(function() {
@@ -122,3 +123,11 @@ angular.module('photoShowApp', ["ngWaterfall", "ui.router"])
             });
         };
     })
+    .filter('replaceX', function() {
+        return function(text) {
+            return text.replace('\\','/');
+        }
+    })
+    .filter('encodeURI', function() {
+        return window.encodeURI;
+    });
